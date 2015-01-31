@@ -31,46 +31,6 @@ def parse_sysbench(filename)
   return sysbench_data
 end
 
-def parse_tdctl(filename, td_devices)
-  tdctl_file = File.open(filename,'r')
-
-  td_cols = %w(iops rd_m/s wr_m/s lat_us warn error)
-
-  td_count = 1
-  td_data = {}
-  td_devices.each { |td_device|
-    td_data[td_device] = {}
-  }
-
-  if !tdctl_file.nil?
-    tdctl_file.each { |line|
-      line_data = line.split(' ')
-      td_devices.each { |td_device|
-        if line =~ /.*#{td_device}$/
-          td_data[td_device][td_count] = {}
-          td_col_count = 1
-          td_cols.each { |td_col|
-            td_data[td_device][td_count][td_col] = line_data[td_col_count]
-            td_col_count += 1
-          }
-        end
-      }
-      if line =~ /^[0-9].*[0-9]$/
-        td_device="aggr"
-        td_data[td_device][td_count] = {}
-        td_col_count = 1
-        td_cols.each { |td_col|
-          td_data[td_device][td_count][td_col] = line_data[td_col_count]
-          td_col_count += 1
-        }
-        td_count += 1
-      end
-    }
-  end
-  tdctl_file.close
-  return td_data
-end
-
 benchmarks = Dir.glob('sysbench**/sysbench**/')
 benchmarks.each do |benchmark|
   benchmark_type,storage = benchmark.chop.split('/')[0].split('_')

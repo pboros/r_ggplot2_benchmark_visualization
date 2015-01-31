@@ -1,0 +1,1 @@
+Slides and sample data for FOSDEM 2015 MySQL and Friends devroom talk. The pdf slides are in the repository as well. On the last slide, there is a QR code pointing to this github repo. In order to avoid infinite loop, follow that only once. 
